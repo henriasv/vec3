@@ -25,10 +25,13 @@ public:
     void randbox();
     void floor();
 
+    bool inBox(double, double, double, double, double, double);
+
     double norm();
     double sqnorm();
 
     double prod();
+
 
     static std::random_device rd;
     static std::mt19937 gen;
