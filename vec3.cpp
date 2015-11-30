@@ -63,6 +63,11 @@ void vec3::floor()
     data[2] = ::floor(data[2]);
 }
 
+bool vec3::inBox(double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)
+{
+    return ((data[0] > xmin) && (data[0] < xmax) && (data[1] > ymin) && (data[1] < ymax) && (data[2] > zmin) && (data[2] < zmax));
+}
+
 double vec3::norm()
 {
     return sqrt(data[0]*data[0]+data[1]*data[1]+data[2]*data[2]);
