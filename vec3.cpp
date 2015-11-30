@@ -83,6 +83,11 @@ double vec3::prod()
     return data[0]*data[1]*data[2];
 }
 
+double vec3::sum()
+{
+    return data[0]+data[1]+data[2];
+}
+
 vec3 vec3::operator+(const vec3 & other)
 {
     return vec3(this->data[0] + other.data[0],

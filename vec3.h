@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <random>
+#include <string>
 
 class vec3
 {
@@ -31,6 +32,7 @@ public:
     double sqnorm();
 
     double prod();
+    double sum();
 
 
     static std::random_device rd;
@@ -53,6 +55,8 @@ public:
 
     inline double &operator[](int index) { return data[index]; }
     inline double operator[](int index) const { return data[index]; }
+
+    inline std::string lrAngleEntry() {return std::string("<") + std::to_string(data[0]) + std::string(", ") + std::to_string(data[1]) + std::string(", ") + std::to_string(data[2]) + std::string(">");}
 
     friend std::ostream & operator << (std::ostream &, const vec3 &);
 
