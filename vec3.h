@@ -23,6 +23,7 @@ public:
     double *dataptr();
 
     void randnormalized();
+    void randsphere();
     void randbox();
     void floor();
 
@@ -36,6 +37,9 @@ public:
 
 
     static std::random_device rd;
+    static std::normal_distribution<> randn;
+    static std::uniform_real_distribution<> randu;
+    static std::uniform_int_distribution<> randint;
     static std::mt19937 gen;
 
     vec3 operator+(const vec3 &);

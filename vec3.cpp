@@ -3,6 +3,9 @@
 
 
 std::random_device vec3::rd;
+std::normal_distribution<> vec3::randn(0,1);
+std::uniform_int_distribution<> vec3::randint;
+std::uniform_real_distribution<double> vec3::randu(0,1.0);
 std::mt19937 vec3::gen(vec3::rd());
 
 
@@ -47,6 +50,19 @@ void vec3::randnormalized()
     data[2] = (double) 2*std::generate_canonical<double, 10>(gen);
     (*this) -= 1.0;
     (*this) /= this->norm();
+}
+
+void vec3::randsphere()
+{
+    double r = (double) std::generate_canonical<double, 10>(gen);
+    r = pow(r, 1.0/3);
+    vec3 direction((double) randn(gen), (double) randn(gen), (double) randn(gen));
+    direction /= direction.norm();
+    direction *= r;
+    // std::cout << "Random r vec " <<  direction << std::endl;
+    data[0] = direction[0];
+    data[1] = direction[1];
+    data[2] = direction[2];
 }
 
 void vec3::randbox()
