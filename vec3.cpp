@@ -188,6 +188,12 @@ std::ostream & operator <<(std::ostream &os, const vec3& vec)
     return os;
 }
 
+void vec3::set(const vec3& other) {
+    data[0] = other[0];
+    data[1] = other[1];
+    data[2] = other[2];
+}
+
 void vec3::setX(double arg_x)
 {
     data[0] = arg_x;

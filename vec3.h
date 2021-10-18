@@ -12,6 +12,7 @@ public:
     vec3(double, double, double);
     //vec3(const vec3& w) { data[0] = w.data[0], data[1] = w.data[1],data[2] = w.data[2]; }
     ~vec3();
+    void set(const vec3& other);
     void setX(double);
     void setY(double);
     void setZ(double);
