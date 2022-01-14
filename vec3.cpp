@@ -9,47 +9,28 @@ std::uniform_real_distribution<double> vec3::randu(0,1.0);
 std::mt19937 vec3::gen(vec3::rd());
 
 
-vec3::vec3() : data{0, 0, 0}
+vec3::vec3() : m_x(0), m_y(0), m_z(0)
 {
 }
 
-vec3::vec3(double x, double y, double z) : data{x, y, z}
-{
-
-}
-
-vec3::~vec3()
+vec3::vec3(double x, double y, double z) : m_x(x), m_y(y), m_z(z)
 {
 
 }
 
-double vec3::x()
+double vec3::x() const
 {
-    return data[0];
+    return m_x;
 }
 
-double vec3::y()
+double vec3::y() const
 {
-    return data[1];
+    return m_y;
 }
 
-double vec3::z()
+double vec3::z() const
 {
-    return data[2];
-}
-
-double *vec3::dataptr()
-{
-    return data;
-}
-
-void vec3::randnormalized()
-{
-    data[0] = (double) 2*std::generate_canonical<double, 10>(gen);//rand()/RAND_MAX*2;
-    data[1] = (double) 2*std::generate_canonical<double, 10>(gen);
-    data[2] = (double) 2*std::generate_canonical<double, 10>(gen);
-    (*this) -= 1.0;
-    (*this) /= this->norm();
+    return m_z;
 }
 
 void vec3::randsphere()
@@ -57,154 +38,131 @@ void vec3::randsphere()
     double r = (double) std::generate_canonical<double, 10>(gen);
     r = pow(r, 1.0/3);
     vec3 direction((double) randn(gen), (double) randn(gen), (double) randn(gen));
-    direction /= direction.norm();
-    direction *= r;
-    // std::cout << "Random r vec " <<  direction << std::endl;
-    data[0] = direction[0];
-    data[1] = direction[1];
-    data[2] = direction[2];
+    direction = direction/direction.norm()*r;
+    m_x = direction.m_x;
+    m_y = direction.m_y;
+    m_z = direction.m_z;
 }
 
 void vec3::randbox()
 {
-    data[0] = (double) std::generate_canonical<double, 10>(gen);
-    data[1] = (double) std::generate_canonical<double, 10>(gen);
-    data[2] = (double) std::generate_canonical<double, 10>(gen);
+    m_x = (double) std::generate_canonical<double, 10>(gen);
+    m_y = (double) std::generate_canonical<double, 10>(gen);
+    m_z = (double) std::generate_canonical<double, 10>(gen);
 }
 
 void vec3::floor()
 {
-    data[0] = ::floor(data[0]);
-    data[1] = ::floor(data[1]);
-    data[2] = ::floor(data[2]);
-}
-
-bool vec3::inBox(double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)
-{
-    return ((data[0] > xmin) && (data[0] < xmax) && (data[1] > ymin) && (data[1] < ymax) && (data[2] > zmin) && (data[2] < zmax));
+    m_x = ::floor(m_x);
+    m_y = ::floor(m_y);
+    m_z = ::floor(m_z);
 }
 
 double vec3::norm()
 {
-    return sqrt(data[0]*data[0]+data[1]*data[1]+data[2]*data[2]);
+    return sqrt(m_x*m_x+m_y*m_y+m_z*m_z);
 }
 
 double vec3::sqnorm()
 {
-    return data[0]*data[0]+data[1]*data[1]+data[2]*data[2];
+    return m_x*m_x+m_y*m_y+m_z*m_z;
 }
 
-double vec3::prod()
+vec3 vec3::operator+(const vec3 & other) const 
 {
-    return data[0]*data[1]*data[2];
+    return vec3(this->m_x + other.m_x,
+                this->m_y + other.m_y,
+                this->m_z + other.m_z);
 }
 
-double vec3::sum()
-{
-    return data[0]+data[1]+data[2];
-}
 
-vec3 vec3::operator+(const vec3 & other)
-{
-    return vec3(this->data[0] + other.data[0],
-                this->data[1] + other.data[1],
-                this->data[2] + other.data[2]);
-}
-
-vec3 vec3::operator-(const vec3 & other)
-{
-    return vec3(this->data[0] - other.data[0],
-                this->data[1] - other.data[1],
-                this->data[2] - other.data[2]);
+vec3 vec3::operator-(const vec3 & other) const {
+    return vec3(this->m_x - other.m_x,
+                this->m_y - other.m_y,
+                this->m_z - other.m_z);
 }
 
 vec3& vec3::operator/=(const double & other)
 {
-    data[0]/=other;
-    data[1]/=other;
-    data[2]/=other;
+    m_x/=other;
+    m_y/=other;
+    m_z/=other;
     return *this;
 }
 
 vec3& vec3::operator*=(const double & other)
 {
-    data[0]*=other;
-    data[1]*=other;
-    data[2]*=other;
+    m_x*=other;
+    m_y*=other;
+    m_z*=other;
     return *this;
 }
 
-vec3 vec3::operator*(const vec3& other)
+vec3 vec3::operator*(const vec3& other) const
 {
-    return vec3(this->data[0] * other.data[0],
-                this->data[1] * other.data[1],
-            this->data[2] * other.data[2]);
+    return vec3(this->m_x * other.m_x,
+                this->m_y * other.m_y,
+            this->m_z * other.m_z);
 }
 
-vec3 vec3::operator/(const vec3 & other)
+vec3 vec3::operator/(const vec3 & other) const
 {
-    return vec3(this->data[0] / other.data[0],
-                this->data[1] / other.data[1],
-                this->data[2] / other.data[2]);
+    return vec3(this->m_x / other.m_x,
+                this->m_y / other.m_y,
+                this->m_z / other.m_z);
 }
 
-vec3 vec3::operator/(const double & other)
+vec3 vec3::operator/(const double & other) const
 {
-    return vec3(data[0]/other, data[1]/other, data[2]/other);
+    return vec3(m_x/other, m_y/other, m_z/other);
 }
 
-vec3 vec3::operator*(const double & other)
+vec3 vec3::operator*(const double & other) const 
 {
-    return vec3(data[0]*other, data[1]*other, data[2]*other);
+    return vec3(m_x*other, m_y*other, m_z*other);
 }
 
 vec3 & vec3::operator*=(const vec3 & other)
 {
-    data[0]*=other.data[0];
-    data[1]*=other.data[1];
-    data[2]*=other.data[2];
+    m_x*=other.m_x;
+    m_y*=other.m_y;
+    m_z*=other.m_z;
     return *this;
 }
 
 vec3 &vec3::operator+=(const vec3 & other)
 {
-    data[0]+=other.data[0];
-    data[1]+=other.data[1];
-    data[2]+=other.data[2];
+    m_x+=other.m_x;
+    m_y+=other.m_y;
+    m_z+=other.m_z;
     return *this;
 }
 
 vec3 & vec3::operator-=(const double& other)
 {
-    data[0] -= other;
-    data[1] -= other;
-    data[2] -= other;
+    m_x -= other;
+    m_y -= other;
+    m_z -= other;
     return *this;
 }
 
 std::ostream & operator <<(std::ostream &os, const vec3& vec)
 {
-    os << vec.data[0] << " " << vec.data[1] << " " << vec.data[2];
+    os << vec.x() << " " << vec.y() << " " << vec.z();
     return os;
-}
-
-void vec3::set(const vec3& other) {
-    data[0] = other[0];
-    data[1] = other[1];
-    data[2] = other[2];
 }
 
 void vec3::setX(double arg_x)
 {
-    data[0] = arg_x;
+    m_x = arg_x;
 }
 
 void vec3::setY(double arg_y)
 {
-    data[1] = arg_y;
+    m_y = arg_y;
 }
 
 void vec3::setZ(double arg_z)
 {
-    data[2] = arg_z;
+    m_z = arg_z;
 }
